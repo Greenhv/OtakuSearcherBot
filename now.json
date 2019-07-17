@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "name": "otaku-searcher-bot",
+  "builds": [
+    { "src": "dist/index.js", "use": "@now/node" }
+  ],
+	"routes": [{ "src": "/newMessage", "dest": "/dist/index.js" }],
+	"github": {
+		"enabled": false
+	}
+}
+
