@@ -1,7 +1,9 @@
-import axios from 'axios';
-import searchMediaQuery from './searchMediaQuery';
-import 'cross-fetch/polyfill';
-import 'core-js/stable';
+require('cross-fetch/polyfill');
+require('core-js/stable');
+require('regenerator-runtime/runtime');
+
+const axios = require('axios');
+const searchMediaQuery = require('./searchMediaQuery');
 
 const animeSeparators = ['<', '>'];
 const mangaSeparators = ['[', ']'];
@@ -16,7 +18,7 @@ const getStatAndEndIndexes = (message, [firstSeparator, secondSeparator]) => {
 	return [startIndex, endIndex];
 }
 
-export const getMedia = message => {
+const getMedia = message => {
 	const isAnime = message.indexOf('<') >= 0;
 	const isManga = message.indexOf('[') >= 0;
 	const mediaType = isAnime ? mediaTypes.anime : isManga ? mediaTypes.manga : '';
@@ -27,7 +29,7 @@ export const getMedia = message => {
 	return mediaName ? { name: mediaName, type: mediaType } : null;
 };
 
-export const sendMessage = async (media, client, chatId, res) => {
+const sendMessage = async (media, client, chatId, res) => {
 	try {
 		const mediaData = await client.query({
 			query: searchMediaQuery,
@@ -44,7 +46,6 @@ export const sendMessage = async (media, client, chatId, res) => {
 		*Score*: ${averageScore}/100
 		`;
 
-		console.log('The message is been send', media);
 		await axios.post(
 			`https://api.telegram.org/bot${process.env.TELEGRAM_KEY}/sendMessage`,
 			{
@@ -59,4 +60,9 @@ export const sendMessage = async (media, client, chatId, res) => {
 		console.log('Error :', e);
 		res.end('Error :' + e);
 	}
+};
+
+module.exports = {
+	getMedia,
+	sendMessage,
 };

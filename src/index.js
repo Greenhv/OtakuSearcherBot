@@ -1,13 +1,33 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import axios from 'axios';
-import 'regenerator-runtime/runtime';
-import ApolloClient from 'apollo-boost';
-import { getMedia, sendMessage } from './helper';
+const express = require('express');
+const bodyParser = require('body-parser');
+const { ApolloClient } = require('apollo-client');
+const { createHttpLink } = require('apollo-link-http');
+const { InMemoryCache } = require('apollo-cache-inmemory');
+const { onError } = require('apollo-link-error');
+const { getMedia, sendMessage } = require('./helper');
 
 const app = express();
 const port = 3000;
-const client = new ApolloClient({ uri: 'https://graphql.anilist.co' });
+
+const httpLink = createHttpLink({ uri: 'https://graphql.anilist.co' });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+	if (graphQLErrors) {
+		graphQLErrors.map(({ message, locations, path }) =>
+			console.error(
+				`[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+					locations
+				)}, Path: ${path}`
+			)
+		);
+	}
+
+	if (networkError) console.error(`[Network error]: ${networkError}`);
+});
+const link = errorLink.concat(httpLink);
+const client = new ApolloClient({
+	link,
+	cache: new InMemoryCache(),
+});
 
 app.use(bodyParser.json());
 app.use(
@@ -16,10 +36,8 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => res.send('Hellow world'));
-
 //This is the route the API will call
-app.post('/new-message', function(req, res) {
+app.post('/new-message', async function(req, res) {
   const { message } = req.body
 
   if (!message || !message.text) {
@@ -28,9 +46,8 @@ app.post('/new-message', function(req, res) {
 
 	const media = getMedia(message.text); 
 
-	console.log(media);
-	if (media) {
-		sendMessage(media, client, message.chat.id, res);
+	if (!!media) {
+		await sendMessage(media, client, message.chat.id, res);
 	}
 
 	return res.end()

@@ -5,27 +5,28 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js --exec babel-node",
-    "build": "babel src --out-dir dist",
-    "serve": "node dist/index.js"
+    "start": "nodemon src/index.js",
+    "serve": "node src/index.js"
   },
   "author": "Herbert Videla (@Green_hv)",
   "license": "ISC",
   "dependencies": {
     "apollo-boost": "^0.4.3",
+    "apollo-cache-inmemory": "^1.6.2",
+    "apollo-client": "^2.6.3",
+    "apollo-link-error": "^1.1.11",
+    "apollo-link-http": "^1.5.15",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "core-js": "^3.1.4",
     "cross-fetch": "^3.0.4",
     "express": "^4.17.1",
     "graphql": "^14.4.2",
+    "graphql-tag": "^2.10.1",
+    "parcel": "^1.12.3",
     "regenerator-runtime": "^0.13.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.4",
-    "@babel/node": "^7.5.0",
-    "@babel/preset-env": "^7.5.4",
     "nodemon": "^1.19.1"
   }
 }

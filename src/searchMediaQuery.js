@@ -1,6 +1,6 @@
-import gql from 'graphql-tag';
+const gql = require('graphql-tag');
 
-export default gql`
+const query = gql`
 	query mediaSearchQuery($name: String!, $type: MediaType!) {
 		Media(search: $name, type: $type) {
 			title {
@@ -13,3 +13,5 @@ export default gql`
 		}
 	}
 `;
+
+module.exports = query;

@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "name": "otaku-searcher-bot",
+	"version": 2,
+	"name": "otaku-searcher-bot",
 	"env": {
 		"TELEGRAM_KEY": "@telegram_key"
 	},
@@ -8,13 +8,20 @@
 		"env": {
 			"TELEGRAM_KEY": "@telegram_key"
 		}
-  },
+	},
 	"builds": [
-    { "src": "dist/*", "use": "@now/node" }
-  ],
-	"routes": [{ "src": "/new-message", "dest": "/dist/index.js" }],
+		{
+			"src": "src/*",
+			"use": "@now/node"
+		}
+	],
+	"routes": [
+		{
+			"src": "/new-message",
+			"dest": "/src/index.js"
+		}
+	],
 	"github": {
 		"enabled": false
 	}
 }
-
